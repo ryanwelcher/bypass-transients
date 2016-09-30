@@ -14,10 +14,9 @@ class Suspend_Transients {
 		if ( ! is_admin()  && isset( $_GET['suspend-transients'] ) ) {
 			$this->_known_transients = $this->get_known_transients();
 			add_action( 'init', [ $this, 'filter_all_known_transients' ] );
-			add_action( 'setted_transient', [ $this, 'setted_callback' ] );
-			add_action( 'shutdown', [ $this, 'save_known_transients' ] );
 		}
-
+		add_action( 'setted_transient', [ $this, 'setted_callback' ] );
+		//add_action( 'shutdown', [ $this, 'save_known_transients' ] );
 		add_action( 'admin_bar_menu', [ $this, 'inject_admin_bar_button' ] );
 	}
 

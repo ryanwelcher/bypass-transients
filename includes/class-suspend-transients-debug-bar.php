@@ -2,7 +2,7 @@
 class Suspend_Transients_Debug_Bar extends \Debug_Bar_Panel {
 
 	public function init() {
-		$this->title( __( 'Suspend Transients', 'debug-bar-tracer' ) );
+		$this->title( __( 'Bypass Transients', 'debug-bar-tracer' ) );
 	}
 
 	/**
