@@ -4,6 +4,7 @@ namespace suspendTransients;
 class Suspend_Transients {
 
 	protected $_known_transients       = array();
+	protected $_found_transients       = array();
 	protected $_option_key             = 'st_known_transients';
 	protected $_transients_suspended   = array();
 
@@ -11,12 +12,12 @@ class Suspend_Transients {
 	 * Entry point
 	 */
 	public function init() {
-		if ( ! is_admin()  && isset( $_GET['suspend-transients'] ) ) {
+		if ( ! is_admin()  && isset( $_GET['bypass-transients'] ) ) {
 			$this->_known_transients = $this->get_known_transients();
-			add_action( 'init', [ $this, 'filter_all_known_transients' ] );
+			add_action( 'after_setup_theme', [ $this, 'filter_all_known_transients' ] );
 		}
 		add_action( 'setted_transient', [ $this, 'setted_callback' ] );
-		//add_action( 'shutdown', [ $this, 'save_known_transients' ] );
+		add_action( 'shutdown', [ $this, 'save_known_transients' ] );
 		add_action( 'admin_bar_menu', [ $this, 'inject_admin_bar_button' ] );
 	}
 
@@ -41,7 +42,7 @@ class Suspend_Transients {
 	 */
 	public function setted_callback( $transient_name ) {
 		if ( is_array( $this->_known_transients ) && ! in_array( $transient_name, $this->_known_transients, true ) ) {
-			$this->_known_transients[] = $transient_name;
+			$this->_found_transients[] = $transient_name;
 		}
 	}
 
@@ -72,15 +73,12 @@ class Suspend_Transients {
 
 	public function inject_admin_bar_button() {
 		global $wp_admin_bar;
-		$classes = array();
-		$classes = implode( ' ', $classes );
 
 		$wp_admin_bar->add_menu( array(
 			'id'     => 'suspend-transients',
 			'parent' => 'top-secondary',
-			'title'  => 'Suspend Transients',
-			'href'   => '?suspend-transients=true',
-			'meta'   => array( 'class' => $classes ),
+			'title'  => 'Bypass Transients',
+			'href'   => '?bypass-transients=true',
 			)
 		);
 	}
