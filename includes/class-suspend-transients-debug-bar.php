@@ -2,7 +2,7 @@
 class Suspend_Transients_Debug_Bar extends \Debug_Bar_Panel {
 
 	public function init() {
-		$this->title( __( 'Suspend Transients', 'debug-bar-tracer' ) );
+		$this->title( __( 'Bypass Transients' ) );
 	}
 
 	/**
@@ -12,8 +12,9 @@ class Suspend_Transients_Debug_Bar extends \Debug_Bar_Panel {
 		?>
 		<div id="suspend-transient-information">
 			<?php
-			$this->output_transients( 'known' );
 			$this->output_transients( 'suspended' );
+			$this->output_transients( 'found' );
+			$this->output_transients( 'known' );
 			?>
 		</div>
 		<?php
@@ -25,8 +26,13 @@ class Suspend_Transients_Debug_Bar extends \Debug_Bar_Panel {
 			case 'suspended':
 				$transients           = $suspend_transients->get_suspended_transients();
 				$number_of_transients = count( $transients );
-				$message              = sprintf( _n( 'There was %s transient suspended for this page load.', 'There were %s transients suspended for this page load.', $number_of_transients ), $number_of_transients );
+				$message              = sprintf( _n( 'There was %s transient bypassed for this page load.', 'There were %s transients bypassed for this page load.', $number_of_transients ), $number_of_transients );
 				break;
+			case 'found':
+				$transients           = $suspend_transients->get_found_transients();
+				$number_of_transients = count( $transients );
+				$message              = sprintf( _n( 'There was %s transient found for this page load.', 'There were %s transients found for this page load.', $number_of_transients ), $number_of_transients );
+			break;
 			case 'known':
 				$transients           = $suspend_transients->get_known_transients();
 				$number_of_transients = count( $transients );

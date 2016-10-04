@@ -6,8 +6,6 @@
  * Version: 1.0.0
  * Author: Ryan Welcher
  * Author URI: http://www.ryanwelcher.com
- * Test Domain: brmi
- * Domain Path : /lang
  * License: GPL2
  *
  * Copyright 2014  Ryan Welcher  (email : me@ryanwelcher.com)
