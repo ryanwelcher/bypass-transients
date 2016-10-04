@@ -17,7 +17,7 @@ class Suspend_Transients {
 			add_action( 'after_setup_theme', [ $this, 'filter_all_known_transients' ] );
 		}
 		add_action( 'setted_transient', [ $this, 'setted_callback' ] );
-		add_action( 'shutdown', [ $this, 'save_known_transients' ] );
+		add_action( 'shutdown', [ $this, 'save_found_transients' ] );
 		add_action( 'admin_bar_menu', [ $this, 'inject_admin_bar_button' ] );
 	}
 
@@ -47,6 +47,16 @@ class Suspend_Transients {
 	}
 
 	/**
+	 * Let's add any new transients that were found during the page load.
+	 */
+	public function save_found_transients() {
+		if ( ! empty( $this->_found_transients ) ) {
+			$known = $this->get_known_transients();
+			update_option( $this->_option_key, array_merge( $known, $this->_found_transients ) );
+		}
+	}
+
+	/**
 	 * Callback to save all of the known options very late in the WP load
 	 * to avoid race conditions.
 	 */
@@ -64,6 +74,10 @@ class Suspend_Transients {
 
 	public function get_suspended_transients() {
 		return $this->_transients_suspended;
+	}
+
+	public function get_found_transients() {
+		return $this->_found_transients;
 	}
 
 	/**
