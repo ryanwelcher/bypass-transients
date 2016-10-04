@@ -72,10 +72,18 @@ class Suspend_Transients {
 		return get_option( $this->_option_key , array() );
 	}
 
+	/**
+	 * Helper to retrieve suspended transients.
+	 * @return array
+	 */
 	public function get_suspended_transients() {
 		return $this->_transients_suspended;
 	}
 
+	/**
+	 * Helper to retrieve found transients
+	 * @return array
+	 */
 	public function get_found_transients() {
 		return $this->_found_transients;
 	}
