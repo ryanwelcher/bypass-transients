@@ -20,6 +20,7 @@ known list.
 When activated, the plugin will retrieve any existing transients from the database and add them to the known transients list.
 
 The admin bar will have two new buttons:
+
 1. Bypass Transients: bypasses known transients
 2. Scan Transients: reloads the transients from the database.
 
