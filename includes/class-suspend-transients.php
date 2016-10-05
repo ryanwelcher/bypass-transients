@@ -12,13 +12,19 @@ class Suspend_Transients {
 	 * Entry point
 	 */
 	public function init() {
-		if ( ! is_admin()  && isset( $_GET['bypass-transients'] ) ) {
-			$this->_known_transients = $this->get_known_transients();
+
+		if ( isset( $_GET['bypass-transients'] ) ) {
 			add_action( 'after_setup_theme', [ $this, 'filter_all_known_transients' ] );
 		}
+
+		if ( isset( $_GET['flush-transients'] ) ) {
+			add_action( 'after_setup_theme', [ $this, 'flush_transients' ] );
+		}
+
 		add_action( 'setted_transient', [ $this, 'setted_callback' ] );
-		add_action( 'shutdown', [ $this, 'save_found_transients' ] );
-		add_action( 'admin_bar_menu', [ $this, 'inject_admin_bar_button' ] );
+		add_action( 'shutdown',         [ $this, 'save_found_transients' ] );
+		add_action( 'admin_bar_menu',   [ $this, 'inject_admin_bar_button' ] );
+		add_action( 'admin_bar_menu',   [ $this, 'inject_admin_bar_button_scan' ] );
 	}
 
 
@@ -26,10 +32,14 @@ class Suspend_Transients {
 	 * Add a filter for each known transient to return it as false.
 	 */
 	public function filter_all_known_transients() {
-		foreach ( $this->_known_transients as $transient ) {
+		$this->verify_user_intent( 'bypass_transients' );
+		$this->_known_transients = $this->get_known_transients();
+
+		foreach ( $this->get_known_transients() as $transient ) {
 			add_filter( 'transient_' .  $transient , [ $this, 'count_and_return_false' ], 10, 2 );
 		}
 	}
+
 
 	public function count_and_return_false( $value, $transient ) {
 		$this->_transients_suspended[] = $transient;
@@ -89,10 +99,33 @@ class Suspend_Transients {
 	}
 
 	/**
+	 * Flush the object cache
+	 */
+	public function flush_transients() {
+		$this->verify_user_intent( 'flush_transients' );
+		wp_cache_flush();
+	}
+
+	/**
+	 * Helper to DRY out the nonce checks
+	 * @param $nonce
+	 */
+	protected function verify_user_intent( $nonce ) {
+		if ( ! current_user_can( 'manage_options' ) || false === \wp_verify_nonce( $_GET['wp_nonce'], $nonce ) ) {
+			wp_die( 'You don\'t have the correct permissions to do that' );
+		}
+	}
+
+
+	/**
 	 * On some on activation stuff.
 	 */
 	public function on_activate() {}
 
+
+	/**
+	 * Inject the Bypass button.
+	 */
 	public function inject_admin_bar_button() {
 		global $wp_admin_bar;
 
@@ -100,7 +133,23 @@ class Suspend_Transients {
 			'id'     => 'suspend-transients',
 			'parent' => 'top-secondary',
 			'title'  => 'Bypass Transients',
-			'href'   => '?bypass-transients=true',
+			'href'   => '?bypass-transients=true&wp_nonce=' . wp_create_nonce( 'bypass_transients' ),
+			)
+		);
+	}
+
+	/**
+	 * Add the Flush transients button
+	 */
+	public function inject_admin_bar_button_scan() {
+		global $wp_admin_bar;
+
+		$wp_admin_bar->add_menu(
+			array(
+				'id'     => 'flush-transients',
+				'parent' => 'top-secondary',
+				'title'  => 'Flush Transients',
+				'href'   => '?flush-transients=true&wp_nonce=' . wp_create_nonce( 'flush_transients' ),
 			)
 		);
 	}
