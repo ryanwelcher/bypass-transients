@@ -12,21 +12,23 @@ You can bypass any get_transient() calls on a per page basis by clicking the lin
 
 
 ## Usage ##
-Install an active the plugin as normal. Suspend transients will loading the appropriate class based on the results `wp_using_ext_object_cache()`. Anytime a transient set, the plugin will detect it and add it to the
+Install and activate the plugin as normal. Suspend transients will loading the appropriate class based on the results `wp_using_ext_object_cache()`. Anytime a transient set, the plugin will detect it and add it to the
 known list.
 
 ### Standard Transients ( saved to the database ) ##
 
 When activated, the plugin will retrieve any existing transients from the database and add them to the known transients list.
 
-The admin bar will have two new buttons:
+The Admin Bar will have two new buttons:
 
 1. Bypass Transients: bypasses known transients
 2. Scan Transients: reloads the transients from the database.
 
 ### Object Cached Transients ( i.e memcached )##
 These transients are not stored in the database so the best way to get them is to use the Flush Transients button and reload the page to utilize the transient detection feature of the plugin.
-It may require two page loads; One to detected and add the transient and then a second to actually bypass it.
+It may require two page loads; One to detect and add the transient, and then a second to actually bypass it.
+
+Admin Bar buttons:
 
 1. Bypass Transients: bypasses known transients
 2. Flush Transients: Calls wp_object_cache_flush() to invalidate the caches.
