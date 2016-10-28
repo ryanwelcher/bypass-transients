@@ -8,12 +8,15 @@ class Suspend_Transients {
 	protected $_option_key             = 'st_known_transients';
 	protected $_transients_suspended   = array();
 
+	protected $_is_bypassing           = false;
+
 	/**
 	 * Entry point
 	 */
 	public function init() {
 
 		if ( isset( $_GET['bypass-transients'] ) ) {
+			$this->_is_bypassing = true;
 			add_action( 'after_setup_theme', [ $this, 'filter_all_known_transients' ] );
 		}
 
@@ -129,11 +132,16 @@ class Suspend_Transients {
 	public function inject_admin_bar_button() {
 		global $wp_admin_bar;
 
-		$wp_admin_bar->add_menu( array(
-			'id'     => 'suspend-transients',
-			'parent' => 'top-secondary',
-			'title'  => 'Bypass Transients',
-			'href'   => '?bypass-transients=true&wp_nonce=' . wp_create_nonce( 'bypass_transients' ),
+		$classes = ( $this->_is_bypassing ) ? 'bypass-transients active': 'bypass-transients';
+
+		echo $var;
+		$wp_admin_bar->add_menu(
+			array(
+				'id'     => 'suspend-transients',
+				'parent' => 'top-secondary',
+				'title'  => 'Bypass Transients',
+				'href'   => '?bypass-transients=true&wp_nonce=' . wp_create_nonce( 'bypass_transients' ),
+				'meta'   => array( 'class' => $classes ),
 			)
 		);
 	}
@@ -147,7 +155,7 @@ class Suspend_Transients {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'flush-transients',
-				'parent' => 'top-secondary',
+				'parent' => 'suspend-transients',
 				'title'  => 'Flush Transients',
 				'href'   => '?flush-transients=true&wp_nonce=' . wp_create_nonce( 'flush_transients' ),
 			)

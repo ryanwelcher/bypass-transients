@@ -57,7 +57,7 @@ class Suspend_Transients_Database extends Suspend_Transients {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'scan-transients',
-				'parent' => 'top-secondary',
+				'parent' => 'suspend-transients',
 				'title'  => 'Scan Transients',
 				'href'   => '?scan-transients=true&wp_nonce=' . wp_create_nonce( 'scan_transients' ),
 			)
