@@ -1,0 +1,23 @@
+{
+  "name": "bypass-transients",
+  "version": "1.0.0",
+  "description": "A development plugin to allow bypassing transients on a per-page basis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanwelcher/suspend-transients.git"
+  },
+  "keywords": [
+    "wordpress",
+    "development"
+  ],
+  "author": "Ryan Welcher",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ryanwelcher/suspend-transients/issues"
+  },
+  "homepage": "https://github.com/ryanwelcher/suspend-transients#readme"
+}
