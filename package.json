@@ -2,10 +2,6 @@
   "name": "bypass-transients",
   "version": "1.0.0",
   "description": "A development plugin to allow bypassing transients on a per-page basis",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ryanwelcher/suspend-transients.git"
@@ -19,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/ryanwelcher/suspend-transients/issues"
   },
-  "homepage": "https://github.com/ryanwelcher/suspend-transients#readme"
+  "homepage": "https://github.com/ryanwelcher/suspend-transients#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-cssmin": "^1.0.2",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-sass": "^1.2.1",
+    "matchdep": "^1.0.1"
+  }
 }

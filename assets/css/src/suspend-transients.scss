@@ -1,0 +1,10 @@
+#wpadminbar {
+  #wp-admin-bar-suspend-transients {
+    &.active {
+      background: green;
+    }
+    &.found {
+      background: red;
+    }
+  }
+}
