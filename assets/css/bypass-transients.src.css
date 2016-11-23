@@ -1,0 +1,5 @@
+#wpadminbar #wp-admin-bar-bypass-transients.active {
+  background: green; }
+
+#wpadminbar #wp-admin-bar-bypass-transients.found {
+  background: red; }

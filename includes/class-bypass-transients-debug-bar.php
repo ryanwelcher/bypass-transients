@@ -1,5 +1,5 @@
 <?php
-class Suspend_Transients_Debug_Bar extends \Debug_Bar_Panel {
+class Bypass_Transients_Debug_Bar extends \Debug_Bar_Panel {
 
 	public function init() {
 		$this->title( __( 'Bypass Transients' ) );
@@ -10,7 +10,7 @@ class Suspend_Transients_Debug_Bar extends \Debug_Bar_Panel {
 	 */
 	public function render() {
 		?>
-		<div id="suspend-transient-information">
+		<div id="bypass-transient-information">
 			<?php
 			$this->output_transients( 'suspended' );
 			$this->output_transients( 'found' );
@@ -21,20 +21,20 @@ class Suspend_Transients_Debug_Bar extends \Debug_Bar_Panel {
 	}
 
 	function output_transients( $type = 'known' ) {
-		global $suspend_transients;
+		global $bypass_transients;
 		switch ( $type ) {
 			case 'suspended':
-				$transients           = $suspend_transients->get_suspended_transients();
+				$transients           = $bypass_transients->get_bypassed_transients();
 				$number_of_transients = count( $transients );
 				$message              = sprintf( _n( 'There was %s transient bypassed for this page load.', 'There were %s transients bypassed for this page load.', $number_of_transients ), $number_of_transients );
 				break;
 			case 'found':
-				$transients           = $suspend_transients->get_found_transients();
+				$transients           = $bypass_transients->get_found_transients();
 				$number_of_transients = count( $transients );
 				$message              = sprintf( _n( 'There was %s transient found for this page load.', 'There were %s transients found for this page load.', $number_of_transients ), $number_of_transients );
 			break;
 			case 'known':
-				$transients           = $suspend_transients->get_known_transients();
+				$transients           = $bypass_transients->get_known_transients();
 				$number_of_transients = count( $transients );
 				$message              = sprintf( _n( 'There is %s known transient for the active theme/plugins.', 'There are %s known transients for the active theme/plugins.', $number_of_transients ), $number_of_transients );
 				break;

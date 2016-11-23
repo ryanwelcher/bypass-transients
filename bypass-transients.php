@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Suspend Transients
+ * Plugin Name: Bypass Transients
  * Plugin URI:
  * Description: Bypass transients for development.
  * Version: 1.0.0
@@ -23,23 +23,23 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-namespace suspendTransients;
+namespace bypassTransients;
 
-require_once 'includes/class-suspend-transients.php';
-require_once 'includes/class-suspend-transients-database.php';
+require_once 'includes/class-bypass-transients.php';
+require_once 'includes/class-bypass-transients-database.php';
 
 
 
 // Get the instance we need.
 
-$suspend_transients = ( wp_using_ext_object_cache() ) ? new Suspend_Transients() : new Suspend_Transients_Database();
-$suspend_transients->init();
+$bypass_transients = ( wp_using_ext_object_cache() ) ? new Bypass_Transients() : new Bypass_Transients_Database();
+$bypass_transients->init();
 
-register_activation_hook( __FILE__, array( $suspend_transients, 'on_activate' ) );
+register_activation_hook( __FILE__, array( $bypass_transients, 'on_activate' ) );
 
 function add_to_debug_bar( $panels ) {
-	require_once 'includes/class-suspend-transients-debug-bar.php';
-	$panels[] = new \Suspend_Transients_Debug_Bar();
+	require_once 'includes/class-bypass-transients-debug-bar.php';
+	$panels[] = new \Bypass_Transients_Debug_Bar();
 	return $panels;
 }
 add_filter( 'debug_bar_panels', __NAMESPACE__ .'\\add_to_debug_bar' );

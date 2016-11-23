@@ -1,12 +1,12 @@
 <?php
-namespace suspendTransients;
+namespace bypassTransients;
 
-class Suspend_Transients {
+class Bypass_Transients {
 
 	protected $_known_transients       = array();
 	protected $_found_transients       = array();
 	protected $_option_key             = 'st_known_transients';
-	protected $_transients_suspended   = array();
+	protected $_transients_bypassed    = array();
 
 	protected $_is_bypassing           = false;
 
@@ -33,7 +33,8 @@ class Suspend_Transients {
 	}
 
 	function add_admin_bar_css() {
-		wp_enqueue_style( 'suspend-transients', plugins_url( 'assets/css/suspend-transients.src.css', dirname( __FILE__ ) ) );
+		$min = ( defined( 'SCRIPT_DEBUG' ) & true === SCRIPT_DEBUG ) ? 'src' : 'min';
+		wp_enqueue_style( 'bypass-transients', plugins_url( 'assets/css/bypass-transients.' . $min . '.css', dirname( __FILE__ ) ) );
 	}
 
 
@@ -45,13 +46,13 @@ class Suspend_Transients {
 		$this->_known_transients = $this->get_known_transients();
 
 		foreach ( $this->get_known_transients() as $transient ) {
-			add_filter( 'transient_' .  $transient , [ $this, 'count_and_return_false' ], 10, 2 );
+			add_filter( 'transient_' . $transient , [ $this, 'count_and_return_false' ], 10, 2 );
 		}
 	}
 
 
 	public function count_and_return_false( $value, $transient ) {
-		$this->_transients_suspended[] = $transient;
+		$this->_transients_bypassed[] = $transient;
 		return false;
 	}
 
@@ -95,8 +96,8 @@ class Suspend_Transients {
 	 * Helper to retrieve suspended transients.
 	 * @return array
 	 */
-	public function get_suspended_transients() {
-		return $this->_transients_suspended;
+	public function get_bypassed_transients() {
+		return $this->_transients_bypassed;
 	}
 
 	/**
@@ -146,12 +147,12 @@ class Suspend_Transients {
 			$classes .= ' found';
 		}
 
-		$title   = ( $this->_is_bypassing ) ? 'Activate Transients' : 'Bypass Transients';
+		$title   = ( $this->_is_bypassing ) ? 'Re-activate Transients' : 'Bypass Transients';
 		$href    = ( $this->_is_bypassing ) ? '/' :'?bypass-transients=true&wp_nonce=' . wp_create_nonce( 'bypass_transients' );
 
 		$wp_admin_bar->add_menu(
 			array(
-				'id'     => 'suspend-transients',
+				'id'     => 'bypass-transients',
 				'parent' => 'top-secondary',
 				'title'  => $title,
 				'href'   => $href,
@@ -164,12 +165,12 @@ class Suspend_Transients {
 			$wp_admin_bar->add_menu(
 				array(
 					'id' => 'bypassed-transients',
-					'parent' => 'suspend-transients',
-					'title' => 'Bypassed Transients: ' . count( $this->_transients_suspended ),
+					'parent' => 'bypass-transients',
+					'title' => 'Bypassed Transients: ' . count( $this->_transients_bypassed ),
 				)
 			);
 
-			foreach ( $this->_transients_suspended as $key => $transient ) {
+			foreach ( $this->_transients_bypassed as $key => $transient ) {
 				$wp_admin_bar->add_menu(
 					array(
 						'id' => $key . '_' . $transient,
@@ -184,7 +185,7 @@ class Suspend_Transients {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'known-transients',
-				'parent' => 'suspend-transients',
+				'parent' => 'bypass-transients',
 				'title'  => 'Known Transients: ' . count( $this->get_known_transients() ),
 			)
 		);
@@ -193,7 +194,7 @@ class Suspend_Transients {
 			$wp_admin_bar->add_menu(
 				array(
 					'id'     => 'found-transients',
-					'parent' => 'suspend-transients',
+					'parent' => 'bypass-transients',
 					'title'  => 'Found Transients: ' . count( $this->get_found_transients() ),
 				)
 			);
@@ -219,7 +220,7 @@ class Suspend_Transients {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'flush-transients',
-				'parent' => 'suspend-transients',
+				'parent' => 'bypass-transients',
 				'title'  => 'Flush Transients',
 				'href'   => '?flush-transients=true&wp_nonce=' . wp_create_nonce( 'flush_transients' ),
 			)

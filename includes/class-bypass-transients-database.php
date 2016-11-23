@@ -1,8 +1,8 @@
 <?php
 
-namespace suspendTransients;
+namespace bypassTransients;
 
-class Suspend_Transients_Database extends Suspend_Transients {
+class Bypass_Transients_Database extends Bypass_Transients {
 
 	public function on_activate() {
 		parent::on_activate();
@@ -57,7 +57,7 @@ class Suspend_Transients_Database extends Suspend_Transients {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'scan-transients',
-				'parent' => 'suspend-transients',
+				'parent' => 'bypass-transients',
 				'title'  => 'Scan Transients',
 				'href'   => '?scan-transients=true&wp_nonce=' . wp_create_nonce( 'scan_transients' ),
 			)
