@@ -6,7 +6,7 @@ class Suspend_Transients_Database extends Suspend_Transients {
 
 	public function on_activate() {
 		parent::on_activate();
-		$this->scan_transients();
+		$this->retrieve_transients_from_database();
 	}
 
 	public function init() {
@@ -14,14 +14,23 @@ class Suspend_Transients_Database extends Suspend_Transients {
 		add_action( 'admin_bar_menu', [ $this, 'inject_admin_bar_button_scan' ] );
 
 		if ( isset( $_GET['scan-transients'] ) ) {
-			$this->scan_transients();
+			add_action( 'after_setup_theme', [ $this, 'scan_transients' ] );
 		}
 	}
 
 	/**
-	 * Retrieve the transients from the database.
+	 * Retrieve the transients from the database with user checking.
 	 */
 	public function scan_transients() {
+		$this->verify_user_intent( 'scan_transients' );
+		$this->retrieve_transients_from_database();
+	}
+
+
+	/**
+	 * Retrieves the transients from the options table and generates the known list.
+	 */
+	protected function retrieve_transients_from_database() {
 		global $wpdb;
 		$sql = "SELECT option_name from $wpdb->options WHERE option_name LIKE '_transient_%'";
 		$transients = $wpdb->get_results( $sql );
@@ -48,9 +57,9 @@ class Suspend_Transients_Database extends Suspend_Transients {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'     => 'scan-transients',
-				'parent' => 'top-secondary',
+				'parent' => 'suspend-transients',
 				'title'  => 'Scan Transients',
-				'href'   => '?scan-transients=true',
+				'href'   => '?scan-transients=true&wp_nonce=' . wp_create_nonce( 'scan_transients' ),
 			)
 		);
 	}
