@@ -1,4 +1,4 @@
-# Suspend Transients #
+# Bypass Transients #
 
 We all know that caching is FTW. But, caching can be a nuisance when trying to develop or debug. That's where this plugin comes in.
 You can bypass any get_transient() calls on a per page basis by clicking the link in the Admin Bar.
