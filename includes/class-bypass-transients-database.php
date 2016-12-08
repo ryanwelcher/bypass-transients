@@ -1,7 +1,5 @@
 <?php
 
-namespace bypassTransients;
-
 class Bypass_Transients_Database extends Bypass_Transients {
 
 	public function on_activate() {

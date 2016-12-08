@@ -1,5 +1,4 @@
 <?php
-namespace bypassTransients;
 
 class Bypass_Transients {
 

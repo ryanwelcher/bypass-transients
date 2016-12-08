@@ -23,24 +23,21 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-namespace bypassTransients;
-
 require_once 'includes/class-bypass-transients.php';
 require_once 'includes/class-bypass-transients-database.php';
 
 
 
 // Get the instance we need.
-
 $bypass_transients = ( wp_using_ext_object_cache() ) ? new Bypass_Transients() : new Bypass_Transients_Database();
 $bypass_transients->init();
 
 register_activation_hook( __FILE__, array( $bypass_transients, 'on_activate' ) );
 
-function add_to_debug_bar( $panels ) {
+function bypass_transients_add_to_debug_bar( $panels ) {
 	require_once 'includes/class-bypass-transients-debug-bar.php';
 	$panels[] = new \Bypass_Transients_Debug_Bar();
 	return $panels;
 }
-add_filter( 'debug_bar_panels', __NAMESPACE__ .'\\add_to_debug_bar' );
+add_filter( 'debug_bar_panels', 'bypass_transients_add_to_debug_bar' );
 
