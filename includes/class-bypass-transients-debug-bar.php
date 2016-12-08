@@ -1,5 +1,5 @@
 <?php
-class Bypass_Transients_Debug_Bar extends \Debug_Bar_Panel {
+class Bypass_Transients_Debug_Bar extends Debug_Bar_Panel {
 
 	public function init() {
 		$this->title( __( 'Bypass Transients' ) );
@@ -49,7 +49,7 @@ class Bypass_Transients_Debug_Bar extends \Debug_Bar_Panel {
 		<h4><?php echo esc_html( $message );?></h4>
 		<?php
 		if ( ! empty( $transients ) ) {
-			echo "<pre>\n" . print_r( $transients,1 ) .'</pre>';
+			echo "<pre>\n" . print_r( $transients,1 ) . '</pre>';
 		}
 	}
 }
