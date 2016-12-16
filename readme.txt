@@ -69,5 +69,5 @@ No standard transients are not deleted. In an object cached environment, the cac
 == Changelog ==
 
 = 1.0.0 =
-* Inital Release
+* Initial Release
 
